@@ -2,18 +2,18 @@
 
      /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-       #map {
+       /* #map {
         height: 88%;
         width: 70%;
         border-radius: 1%;
-      }
+      } */
       /* Optional: Makes the sample page fill the window. */
-      html, body {
+      /* html, body {
         height: 97%;
         margin: 0;
         padding: 0;
-      }
-      .moveRight {
+      } */
+      /* .moveRight {
         float: right;
       }
       .moveLeft {
@@ -51,10 +51,10 @@
       }
       * {
         box-sizing: border-box;
-      }
+      } */
       
       /* Style the search field */
-      form.example input[type=text] {
+      /* form.example input[type=text] {
         padding: 10px;
         font-size: 17px;
         border: 1px solid grey;
@@ -63,11 +63,10 @@
         background: #f1f1f1;
         border-top-left-radius: 10%;
         border-bottom-left-radius: 10%;
-        /* margin: 1%; */
-      }
+      } */
       
       /* Style the submit button */
-      form.example button {
+      /* form.example button {
         float: left;
         width: 20%;
         padding: 10px;
@@ -75,27 +74,130 @@
         color: white;
         font-size: 17px;
         border: 1px solid grey;
-        border-left: none; /* Prevent double borders */
+        border-left: none; 
         cursor: pointer;
         border-top-right-radius: 20%;
         border-bottom-right-radius: 20%;
-        /* margin-right: 2%; */
-      }
+      } */
       
-      form.example button:hover {
+      /* form.example button:hover {
         background: #0b7dda;
-      }
+      } */
       /* Clear floats */
-      form.example::after {
+      /* form.example::after {
         content: "";
         clear: both;
         display: table;
-      }
-      .contentTitle {
+      } */
+      /* .contentTitle {
         margin-top: 5%;
         margin-bottom: 5%;
         line-height: normal;
         font-family: Helvetica,Sans-Serif !important;
         font-weight: 600;
         color: #58585b;
+      } */
+      html, body {
+        font-family: Helvetica, Arial, sans-serif !important;
+        font-weight: normal;
+        position: relative;
       }
+      .header {
+        padding: 10px;
+        height: 0%;
+        text-align: center;
+        background: black;
+        color: white;
+        font-size: 30px;
+      }
+      .pad {
+        margin-top: 60px;
+        /* margin-bottom: 10px; */
+        margin-right: 150px;
+        /* height: 100%; */
+        /* margin-left: 100px; */
+      }
+      .blue {
+        color: cornflowerblue;
+        padding-top: 2%;
+        font-size: 1.2em;
+      }
+      #map {
+        height: 500px;
+        width: 100%;
+        border: 1px solid grey;
+      }
+      .searchArea {
+        height: 100px;
+        width: 100%;
+        background-color: lightgray;
+        padding: 3%;
+        box-shadow: 0.5px 1px #888888;
+      }
+      #address {
+        border: 1.5px solid black;
+        width: 60%
+      }
+      #submit {
+        width: 10%;
+        background-color: violet
+      }
+      .warnings {
+        width: 100%;
+        height: 130px;
+        border-bottom: 1px solid #888888;
+      }
+      .icon-flood-warning-low {
+        width: 50px;
+        height: 50px;
+        margin-top: -26px !important;
+        background-image: url(/images/flood-alerts-low.gif);
+        background-position: center center;
+        background-size: 90%;
+        margin-left: -2px;
+    }
+    .icon-flood-warning-medium {
+      width: 50px;
+      height: 50px;
+      margin-top: -26px !important;
+      background-image: url(/images/flood-alerts-medium.gif);
+      background-position: center center;
+      background-size: 90%;
+      margin-left: -2px;
+  }
+  .icon-flood-warning-high {
+    width: 50px;
+    height: 50px;
+    margin-top: -26px !important;
+    background-image: url(/images/flood-alerts-high.gif);
+    background-position: center center;
+    background-size: 90%;
+    margin-left: -2px;
+}
+.footer {
+    margin-top: 50px;
+    height: 0%;
+    text-align: center;
+    background: #58585b;
+    color: white;
+    font-size: 1em;
+    margin-bottom: 0;
+    bottom: 0;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: #58585b;
+    text-align: center;
+    color: white;
+    padding-top: 10px;
+  }
+.container {
+    min-height: 100vh; 
+    overflow: hidden;
+    display: block;
+    position: relative;
+    padding-bottom: 50px;
+  }

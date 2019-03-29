@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
+<html lang="en">
 
 <head>
-  <title>UK Flood Map System</title>
-  <meta name="viewport" content="initial-scale=1.0">
+  <!-- Meta Data -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <script src="map.js"></script>
-  <!-- Load icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <link href="map.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Title -->
+  <title>UK Flood Map System</title>
+
+  <!-- Scripts -->
+  <script src="map.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
@@ -21,45 +21,121 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACxXYNZL4kLievZXYfvrMj68yXVKGXhfs&callback=initMap"
+    async defer></script>
+
+  <!-- Stylesheets -->
+  <!-- Load icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="map.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
   <!-- Header -->
-  <nav class="navbar navbar-light bg-light">
-    <img src="uk_image.png" width="80" height="40" alt="UK Flag Image">
-    <h4 class="d-flex justify-content-center">UK Flood Map System </h4>
-  </nav>
-  <!-- Header -->
+  <div class="header">
+    <h4><b>Flood Monitoring System </b></h4>
+  </div>
+  <!-- Header Ends-->
 
-  <!-- Body -->
-  <div class="moveLeft feature">
-    <h5 class="contentTitle"> Search UK Locations</h5>
-    
-    <!-- Search Bar -->
-    <div class="searchGroup">
-        <form class="example">
+  <!-- Content -->
+  <div class="container pad">
+    <!-- First Row Starts-->
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-5">
+        <h2><b>
+            Flood Warnings for:
+          </b></h2>
+        <h1><b>
+            Kent, England
+          </b></h1>
+        <p class="blue" id="currentDate">
+          12:39pm Friday 29 March 2019
+        </p>
+      </div>
+      <div class="col-sm-6">
+      </div>
+    </div>
+    <!-- First Row Ends-->
+
+    <!-- Second Row Starts-->
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-5">
+        <div class="searchArea">
+          <h5><b>
+              Show warnings near a location
+            </b></h5>
+          <form class="example">
             <input id="address" type="text" placeholder="Enter location..." name="search">
             <button id="submit" type="button"><i class="fa fa-search"></i></button>
           </form>
+        </div>
+
+        <div class="warnings">
+          <i class="icon-flood-warning-low">
+
+          </i>
+        </div>
+        <div class="warnings">
+            <p>
+                hh
+              </p>
+        </div>
+        <div class="warnings">
+            <p>
+                hh
+              </p>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div id="map"></div>
+      </div>
+      <div class="col-sm-1">
+      </div>
     </div>
-    
-    <!-- Other Information -->
+    <!-- Second Row Ends-->
+
+  </div>
+  <!-- Content Ends -->
+
+  <!-- Footer -->
+  <footer>
+      Internet of Things Assessment 3 - Copyright 2018.
+  </footer>
+  <!-- Footer Ends-->
+
+  <!-- <nav class="navbar navbar-light bg-light">
+    <img src="uk_image.png" width="80" height="40" alt="UK Flag Image">
+    <h4 class="d-flex justify-content-center">UK Flood Map System </h4>
+  </nav>
+
+
+  <div class="moveLeft feature">
+    <h5 class="contentTitle"> Search UK Locations</h5>
+
+    <div class="searchGroup">
+      <form class="example">
+        <input id="address" type="text" placeholder="Enter location..." name="search">
+        <button id="submit" type="button"><i class="fa fa-search"></i></button>
+      </form>
+    </div>
+
     <div class="otherFeature">
-      
+
     </div>
   </div>
 
   <div class="moveRight" id="map"></div>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACxXYNZL4kLievZXYfvrMj68yXVKGXhfs&callback=initMap"
-    async defer></script>
-  <!-- Body -->
 
 
-  <!-- Footer -->
-  <div class="footer"> 
+  <div class="footer">
     <p>Internet of Things Assessment Three (3)</p>
-  </div>
-  <!-- Footer -->
+  </div> -->
 </body>
 
 </html>

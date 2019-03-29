@@ -29,3 +29,9 @@ function geocodeAddress(geocoder, resultsMap) {
     }
   });
 }
+
+// function getDate() { 
+//  document.getElementById('currentDate').innerHTML = Date();
+// };
+
+// getDate();

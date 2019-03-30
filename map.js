@@ -76,8 +76,10 @@ function geocodeAddress(geocoder, resultsMap) {
   });
 }
 
-// function getDate() { 
-//  document.getElementById('currentDate').innerHTML = Date();
-// };
-
-// getDate();
+/**
+ * Function that diaplsy the current time and date 
+ */
+window.onload = function getDate() { 
+  var d = new Date();
+  document.getElementById('currentDate').innerHTML = d.toUTCString();
+};

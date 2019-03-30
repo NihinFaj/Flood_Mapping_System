@@ -1,6 +1,6 @@
 /**
  * @description The Javscript that controls the functionality of the Map
- * @authors Nihinlolamiwa Fajemilehin, Timothy Shirgba, Ben, Guillame
+ * @author Nihinlolamiwa Fajemilehin, Timothy Shirgba
  * @version 1.0
  */
 
@@ -42,7 +42,7 @@ function initMap() {
 function showLocation(jsonObj) {
   var locations = jsonObj['items'];
 
-  for(var i =0; i < locations.length; i++) {
+  for(var i = 0; i < locations.length; i++) {
     var latitude = locations[i].lat;
     var longitude = locations[i].long;
     var station = locations[i].label;
@@ -65,7 +65,7 @@ function geocodeAddress(geocoder, resultsMap) {
   geocoder.geocode({'address': address}, function(results, status) {
     if (status === 'OK') {
       resultsMap.setCenter(results[0].geometry.location);
-      // Uncomment to allow the use of comments
+      // Uncomment to allow marker be displayed on search location
       // var marker = new google.maps.Marker({
       //   map: resultsMap,
       //   position: results[0].geometry.location

@@ -1,29 +1,75 @@
-var map;
+/**
+ * @description The Javscript that controls the functionality of the Map
+ * @authors Nihinlolamiwa Fajemilehin, Timothy Shirgba, Ben, Guillame
+ * @version 1.0
+ */
 
+var map;
+const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
+
+/**
+ * Function that initialises the map and displays neccesary markers
+ * on the map
+ */
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
+    center: {lat: 51.297500, lng: 1.069722},
     zoom: 8
   });
 
-  var geocoder = new google.maps.Geocoder();
+  // Make call to the URL and return result
+  var request = new XMLHttpRequest();
+  request.open('GET', requestURL);
+  request.responseType = 'json';
+  request.send();
 
+  request.onload = function() {
+    var myresults = request.response;
+    showLocation(myresults);
+  }
+
+  var geocoder = new google.maps.Geocoder();
   document.getElementById('submit').addEventListener('click', function() {
     geocodeAddress(geocoder, map);
   });
 }
 
+/**
+ * Function that takes in a the JSON object of all locations retrieved and displays the locations
+ * as markers on the Map  
+ * @param {*} jsonObj The JSON object that contains all the locations retrieved
+ */
+function showLocation(jsonObj) {
+  var locations = jsonObj['items'];
+
+  for(var i =0; i < locations.length; i++) {
+    var latitude = locations[i].lat;
+    var longitude = locations[i].long;
+    var station = locations[i].label;
+    var latLng = new google.maps.LatLng(latitude,longitude);
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map,
+      title: station
+    });
+  }
+}
+
+/**
+ *  Function that displays the location entered in the search box on the Map
+ * @param {*} geocoder The geocoder object
+ * @param {*} resultsMap The map object
+ */
 function geocodeAddress(geocoder, resultsMap) {
-  console.log("I just entered the function");
   var address = document.getElementById('address').value;
   geocoder.geocode({'address': address}, function(results, status) {
     if (status === 'OK') {
       resultsMap.setCenter(results[0].geometry.location);
       // Uncomment to allow the use of comments
-      var marker = new google.maps.Marker({
-        map: resultsMap,
-        position: results[0].geometry.location
-      });
+      // var marker = new google.maps.Marker({
+      //   map: resultsMap,
+      //   position: results[0].geometry.location
+      // });
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
     }

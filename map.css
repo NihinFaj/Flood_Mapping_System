@@ -103,3 +103,6 @@
     color: white;
     padding-top: 10px;
     }  
+    .bold {
+      font-weight: 600; 
+    }

@@ -74,6 +74,9 @@ function geocodeAddress(geocoder, resultsMap) {
       alert('Geocode was not successful for the following reason: ' + status);
     }
   });
+
+  //Bind address searched to the view
+  document.getElementById('placeSearched').innerHTML = address;
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- * @description The Javscript that controls the functionality of the Map
+ * @description The Javascript that controls the functionality of the Map
  * @author Nihinlolamiwa Fajemilehin, Timothy Shirgba
  * @version 1.0
  */
@@ -71,16 +71,43 @@ function showLocation(jsonObj, myMap) {
 
     markers[i].index = i;
 
+    var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h1 id="firstHeading" class="firstHeading">Information</h1>'+
+            '<div id="bodyContent">'+
+            '<p><b>Info</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+            'sandstone rock formation in the southern part of the '+
+            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+            'south west of the nearest large town, Alice Springs; 450&#160;km '+
+            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+            'Aboriginal people of the area. It has many springs, waterholes, '+
+            'rock caves and ancient paintings. Uluru is listed as a World '+
+            'Heritage Site.</p>'+
+            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+            '(last visited June 22, 2009).</p>'+
+            '</div>'+
+            '</div>';
+
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
     google.maps.event.addListener(markers[i], 'click', function () {
       map.setZoom(10);
       map.setCenter(markers[this.index].getPosition());
+
+      infowindow.open(map, markers[this.index]);
     });
   }
 }
 
 /**
- * Function that takes in an Mqtt JSOn Object, breaks it down into an Array and determines if a flood is happening 
- * based on calculations
+ * Function that takes in an Mqtt JSON Object, breaks it down into an Array and determines if flood is happening 
+ * in the areas, based on calculations
  * @param {*} jsonObj 
  */
 function getMqttValues(jsonObj) {
@@ -150,3 +177,40 @@ window.onload = function getDate() {
   var d = new Date();
   document.getElementById('currentDate').innerHTML = d.toUTCString();
 };
+
+function chartThing() {
+  // Get the context of the canvas element we want to select
+var ctx = document.getElementById("myChart").getContext("2d");
+
+// Instantiate a new chart using 'data' (defined below)
+var myChart = new Chart(ctx).Line(data);
+
+var data = {
+  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  datasets: [
+    {
+      label: "My First dataset",
+      fillColor: "rgba(220,220,220,0.2)",
+      strokeColor: "rgba(220,220,220,1)",
+      pointColor: "rgba(220,220,220,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(220,220,220,1)",
+      data: [65, 59, 80, 81, 56, 55, 40]
+    },
+    {
+      label: "My Second dataset",
+      fillColor: "rgba(151,187,205,0.2)",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
+      data: [28, 48, 40, 19, 86, 27, 90]
+    }
+  ]
+};
+
+}
+
+// chartThing();

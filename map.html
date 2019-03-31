@@ -11,7 +11,9 @@
   <title>UK Flood Map System</title>
 
   <!-- Scripts -->
+  <!-- Custom Javascript -->
   <script src="map.js"></script>
+  <!-- Custom Scripts -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
@@ -21,8 +23,15 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+  <!-- Google Map Script -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACxXYNZL4kLievZXYfvrMj68yXVKGXhfs&callback=initMap"
     async defer></script>
+
+  <!-- Chart.js Script -->
+  <!-- <script src="/assets/js/Chart.min.js"></script> -->
+  <!-- <script src="/assets/js/jquery-1.12.0.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+
 
   <!-- Stylesheets -->
   <!-- Load icon library -->
@@ -50,8 +59,8 @@
             Flood Warnings for:
           </b></h2>
         <h1 id="placeSearched" class="bold">
-            Kent, England
-          </h1>
+          Kent, England
+        </h1>
         <p class="blue" id="currentDate">
         </p>
       </div>
@@ -76,19 +85,16 @@
         </div>
 
         <div class="warnings">
-          <i class="icon-flood-warning-low">
-
-          </i>
         </div>
         <div class="warnings">
-            <p>
-                hh
-              </p>
+          <p>
+            hh
+          </p>
         </div>
         <div class="warnings">
-            <p>
-                hh
-              </p>
+          <p>
+            hh
+          </p>
         </div>
       </div>
       <div class="col-sm-5">
@@ -99,12 +105,21 @@
     </div>
     <!-- Second Row Ends-->
 
+    <!-- Third Row Starts-->
+    <div class="row">
+      <div class="col-sm-12">
+          <canvas id="myChart" width="740" height="200"></canvas>
+      </div>
+    </div>
+    <!-- Third Row Ends-->
+
+
   </div>
   <!-- Content Ends -->
 
   <!-- Footer -->
   <footer>
-      Internet of Things Assessment 3 - Copyright 2018.
+    Internet of Things Assessment 3 - Copyright 2018.
   </footer>
   <!-- Footer Ends-->
 </body>

@@ -57,7 +57,7 @@ function showLocation(jsonObj, myMap) {
   var locations = jsonObj['myCollection'];
   var markers = [];
 
-  for (var i = 0; i < locations.length; i++) {
+  for(var i = 0; i < locations.length; i++) {
     var latitude = locations[i].lat;
     var longitude = locations[i].long;
     var station = locations[i].label;
@@ -72,7 +72,6 @@ function showLocation(jsonObj, myMap) {
     markers[i].index = i;
 
     google.maps.event.addListener(markers[i], 'click', function () {
-      console.log("I was clicked");
       map.setZoom(10);
       map.setCenter(markers[this.index].getPosition());
     });
@@ -85,6 +84,37 @@ function showLocation(jsonObj, myMap) {
 function getMqttValues(jsonObj) {
   var mqttValues = jsonObj['myCollection'];
   console.log(mqttValues);
+  for(var i = 0; i < mqttValues.length; i++) {
+
+    var distanceSensorFromRiverBed = mqttValues[i].distance_flood_plain_from_river_bed;
+    var distanceFloodPlainFromRiverBed = mqttValues[i].distance_flood_plain_from_river_bed;
+
+    var base64Payload = mqttValues[i].payload_raw;
+    var hexadecimalValue =  base64toHEX(base64Payload);
+    var reportedDistanceValue = parseInt(hexadecimalValue, 16);
+
+    var depthValueOfRiver = distanceSensorFromRiverBed - reportedDistanceValue;
+    var distanceFromFlooding = distanceFloodPlainFromRiverBed - depthValueOfRiver;
+
+    if(distanceFromFlooding <= 0 || reportedDistanceValue <= (distanceSensorFromRiverBed - distanceFloodPlainFromRiverBed)) {
+      console.log("Flood has happened!!");
+    }
+
+  }
+}
+
+/**
+ * Function that converts a Base64 value to Hexadecimal
+ * @param {*} base64 
+ */
+function base64toHEX(base64) {
+  var raw = atob(base64);
+  var HEX = '';
+  for ( i = 0; i < raw.length; i++ ) {
+    var _hex = raw.charCodeAt(i).toString(16)
+    HEX += (_hex.length==2?_hex:'0'+_hex);
+  }
+  return HEX.toUpperCase();
 }
 
 /**

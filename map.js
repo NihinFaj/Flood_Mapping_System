@@ -79,7 +79,9 @@ function showLocation(jsonObj, myMap) {
 }
 
 /**
- * 
+ * Function that takes in an Mqtt JSOn Object, breaks it down into an Array and determines if a flood is happening 
+ * based on calculations
+ * @param {*} jsonObj 
  */
 function getMqttValues(jsonObj) {
   var mqttValues = jsonObj['myCollection'];
@@ -105,7 +107,7 @@ function getMqttValues(jsonObj) {
 
 /**
  * Function that converts a Base64 value to Hexadecimal
- * @param {*} base64 
+ * @param {*} base64 The Base64 value to be converted to Hexadecimal
  */
 function base64toHEX(base64) {
   var raw = atob(base64);

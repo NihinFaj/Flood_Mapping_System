@@ -6,6 +6,8 @@
 
 var map;
 const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
+const stationsURL = 'http://localhost:3001/api/stations';
+const mqttURL = 'http://localhost:3001/api/mqtt';
 
 /**
  * Function that initialises the map and displays neccesary markers
@@ -14,18 +16,18 @@ const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations'
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 51.297500, lng: 1.069722},
-    zoom: 8
+    zoom: 10
   });
 
   // Make call to the URL and return result
   var request = new XMLHttpRequest();
-  request.open('GET', requestURL);
+  request.open('GET', stationsURL);
   request.responseType = 'json';
   request.send();
 
   request.onload = function() {
     var myresults = request.response;
-    showLocation(myresults);
+    showLocation(myresults, map);
   }
 
   var geocoder = new google.maps.Geocoder();
@@ -39,9 +41,8 @@ function initMap() {
  * as markers on the Map  
  * @param {*} jsonObj The JSON object that contains all the locations retrieved
  */
-function showLocation(jsonObj) {
-  var locations = jsonObj['items'];
-
+function showLocation(jsonObj, myMap) {
+  var locations = jsonObj['myCollection'];
   for(var i = 0; i < locations.length; i++) {
     var latitude = locations[i].lat;
     var longitude = locations[i].long;
@@ -51,6 +52,12 @@ function showLocation(jsonObj) {
       position: latLng,
       map: map,
       title: station
+    });
+
+    marker.addListener('click', function() {
+      console.log("I was clicked");
+      myMap.setZoom(12);
+      myMap.setCenter(marker.getPosition());
     });
   }
 }

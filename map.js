@@ -14,10 +14,13 @@ const mqttURL = 'http://localhost:3001/api/mqtt';
  * on the map
  */
 function initMap() {
+
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 51.297500, lng: 1.069722},
     zoom: 10
   });
+
+  // map = new google.maps.Map(document.getElementById('map'));
 
   // Make call to the URL and return result
   var request = new XMLHttpRequest();
@@ -43,21 +46,26 @@ function initMap() {
  */
 function showLocation(jsonObj, myMap) {
   var locations = jsonObj['myCollection'];
+  var markers = [];
+  
   for(var i = 0; i < locations.length; i++) {
     var latitude = locations[i].lat;
     var longitude = locations[i].long;
     var station = locations[i].label;
     var latLng = new google.maps.LatLng(latitude,longitude);
-    var marker = new google.maps.Marker({
+
+    markers[i] = new google.maps.Marker({
       position: latLng,
       map: map,
       title: station
     });
 
-    marker.addListener('click', function() {
+    markers[i].index = i;
+
+    google.maps.event.addListener(markers[i], 'click', function() {
       console.log("I was clicked");
-      myMap.setZoom(12);
-      myMap.setCenter(marker.getPosition());
+      map.setZoom(12);
+      map.setCenter(markers[this.index].getPosition());
     });
   }
 }

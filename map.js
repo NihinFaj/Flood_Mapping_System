@@ -76,9 +76,25 @@ function showLocation(jsonObj, myMap) {
     google.maps.event.addListener(markers[i], 'click', function () {
 
       console.log("This is the marker I clicked on");
-      console.log(locations[this.index]);
+      var stationReference = locations[this.index].stationref;
+      var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
+      console.log(stationReference);
+      console.log(stationDetailsURL);
 
-      
+      // Make call to the MQTT URL and return result
+      var requestThree = new XMLHttpRequest();
+      requestThree.open('GET', stationDetailsURL);
+      requestThree.responseType = 'json';
+      requestThree.send();
+
+      requestThree.onload = function () {
+        var myresults = requestThree.response;
+        var allValues = myresults['myCollection'].items;
+        console.log(allValues);
+        // getMqttValues(myresults, map);
+      }
+
+
 
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
@@ -99,7 +115,7 @@ function showLocation(jsonObj, myMap) {
 
       map.setZoom(10);
       map.setCenter(markers[this.index].getPosition());
-      document.getElementsByClassName("Location")[0].innerHTML = station;
+      // document.getElementsByClassName("Location")[0].innerHTML = station;
     });
   }
 }

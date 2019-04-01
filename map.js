@@ -61,24 +61,30 @@ function showLocation(jsonObj, myMap) {
     var latitude = locations[i].lat;
     var longitude = locations[i].long;
     var station = locations[i].label;
+    var stationRef = locations[i].stationref;
     var latLng = new google.maps.LatLng(latitude, longitude);
-    console.log(locations[i]);
+    console.log(stationRef);
 
     markers[i] = new google.maps.Marker({
       position: latLng,
       map: map,
-      title: station
+      title: station,
     });
 
     markers[i].index = i;
 
     google.maps.event.addListener(markers[i], 'click', function () {
 
+      console.log("This is the marker I clicked on");
+      console.log(locations[this.index]);
+
+      
+
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
-    
+      modal.style.display = "block";      
 
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
@@ -90,23 +96,9 @@ function showLocation(jsonObj, myMap) {
           modal.style.display = "none";
         }
       }
-      modal.style.display = "block";
-
-      console.log("I am have clicked on a Marker oo");
-
-      // var contentString = '<div id="content">' +
-      //   '<canvas id="myChart" width="450%" height="280%"></canvas>' +
-      //   '</div>';
-
-      // var infowindow = new google.maps.InfoWindow({
-      //   content: contentString
-      // });
 
       map.setZoom(10);
-      // map.setCenter(markers[this.index].getPosition());
-      // infowindow.open(map, markers[this.index]);
-
-      // chartThing();
+      map.setCenter(markers[this.index].getPosition());
       document.getElementsByClassName("Location")[0].innerHTML = station;
     });
   }
@@ -191,9 +183,6 @@ window.onload = function chartThing() {
   // For drawing the lines
   var africa = [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478];
   var asia = [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267];
-  var europe = [168, 170, 178, 190, 203, 276, 408, 547, 675, 734];
-  var latinAmerica = [40, 20, 10, 16, 24, 38, 74, 167, 508, 784];
-  var northAmerica = [6, 3, 2, 2, 7, 26, 82, 172, 312, 433];
 
   var ctx = document.getElementById("myChart");
 
@@ -211,24 +200,6 @@ window.onload = function chartThing() {
         {
           data: asia,
           label: "Asia",
-          borderColor: "#3e95cd",
-          fill: false
-        },
-        {
-          data: europe,
-          label: "Europe",
-          borderColor: "#3e95cd",
-          fill: false
-        },
-        {
-          data: latinAmerica,
-          label: "Latin America",
-          borderColor: "#3e95cd",
-          fill: false
-        },
-        {
-          data: northAmerica,
-          label: "North America",
           borderColor: "#3e95cd",
           fill: false
         }

@@ -8,8 +8,8 @@ var map;
 const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
 const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
-var graphArrayValues = [];
-var graphArrayTime = [];
+// var graphArrayValues = [];
+// var graphArrayTime = [];
 
 /**
  * Function that initialises the map and displays neccesary markers
@@ -41,13 +41,21 @@ function initMap() {
 
   requestTwo.onload = function () {
     var myresults = requestTwo.response;
-    getMqttValues(myresults, map);
+    getMqttValues(myresults);
   }
 
   var geocoder = new google.maps.Geocoder();
   document.getElementById('submit').addEventListener('click', function () {
     geocodeAddress(geocoder, map);
   });
+
+  // document.getElementById('address').addEventListener("keyup", function(event) {
+  //   if (event.keyCode === 13) {
+  //   //  event.preventDefault();
+  //   //  document.getElementById("myBtn").click();
+  //   geocodeAddress(geocoder, map);
+  //   }
+  // });
 }
 
 /**
@@ -65,7 +73,6 @@ function showLocation(jsonObj, myMap) {
     var station = locations[i].label;
     var stationRef = locations[i].stationref;
     var latLng = new google.maps.LatLng(latitude, longitude);
-    console.log(stationRef);
 
     markers[i] = new google.maps.Marker({
       position: latLng,
@@ -75,9 +82,8 @@ function showLocation(jsonObj, myMap) {
 
     markers[i].index = i;
 
-    google.maps.event.addListener(markers[i], 'click', function () {
+    google.maps.event.addListener(markers[i], 'click', function() {
 
-      console.log("This is the marker I clicked on");
       // Retrieve the station reference for the marker clicked on
       var stationReference = locations[this.index].stationref;
 
@@ -86,8 +92,15 @@ function showLocation(jsonObj, myMap) {
       // stationName
       
       var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
-      console.log(stationReference);
-      console.log(stationDetailsURL);
+
+      // Set the two graph arrays back to zero so that new values can be set on clicking a new marker
+      var graphArrayValues = [];
+      var graphArrayTime = [];
+
+      console.log("Graph array is set back to 0 here on click of new marker");
+      console.log(graphArrayValues);
+      console.log(graphArrayTime);
+
 
       // Make call to the Station historical Data URL and return historical data result
       var requestThree = new XMLHttpRequest();
@@ -104,9 +117,8 @@ function showLocation(jsonObj, myMap) {
           graphArrayTime[g] = allValues[g].dateTime;
         }
 
-        // Call the graph creation function to set up the graph when it is popped up
+        // Call the graph creation function to set up the graph with values when it is popped up
         graphCreation(graphArrayValues, graphArrayTime);
-        
       }
 
       var modal = document.getElementById('myModal');
@@ -136,11 +148,11 @@ function showLocation(jsonObj, myMap) {
 /**
  * Function that takes in an Mqtt JSON Object, breaks it down into an Array and determines if flood is happening 
  * in the areas, based on calculations
- * @param {*} jsonObj 
+ * @param {*} jsonObj The object retreivd from the Mqtt Server
  */
 function getMqttValues(jsonObj) {
   var mqttValues = jsonObj['myCollection'];
-  console.log(mqttValues);
+  // console.log(mqttValues);
   for (var i = 0; i < mqttValues.length; i++) {
 
     var distanceSensorFromRiverBed = mqttValues[i].distance_flood_plain_from_river_bed;
@@ -198,33 +210,52 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 
 /**
- * Function that displays the current time and date 
+ * Function that gets and displays the current time and date 
  */
 window.onload = function getDate() {
   var d = new Date();
   document.getElementById('currentDate').innerHTML = d.toUTCString();
 };
 
+var clickCounter = 0;
+var myChart;
+
+/**
+ * Function that creates the graph and binds the values to the graph
+ * @param {*} graphValues The station flood values to be binded to the graph
+ * @param {*} graphTimes The station historical flood times to be binded to the graph
+ */
 function graphCreation(graphValues, graphTimes) {
 
-  console.log("The values I received are: ");
-  console.log(graphValues);
-  console.log(graphTimes);
+  console.log("Value of chart is below");
+  console.log(myChart);
+
+  clickCounter++;
+  console.log(clickCounter)
+  if(clickCounter > 1) {
+    myChart.destroy();
+    console.log("Chart was destroyed first, before constructed again to prevent chart flickering.");
+  }
+
+  // console.log("The values I received are: ");
+  // console.log(graphValues);
+  // console.log(graphTimes);
 
   // Our labels along the x-axis
-  var years = [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050];
+  // var years = [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050];
+  var years = graphTimes;
   // For drawing the lines
-  var africa = graphArrayValues;
+  var values = graphValues;
 
   var ctx = document.getElementById("myChart");
 
-  var myChart = new Chart(ctx, {
+  myChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: years,
       datasets: [
         {
-          data: africa,
+          data: values,
           label: "Water Levels",
           borderColor: "#3e95cd",
           fill: false

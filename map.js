@@ -8,6 +8,8 @@ var map;
 const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
 const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
+var graphArrayValues = [];
+var graphArrayTime = [];
 
 /**
  * Function that initialises the map and displays neccesary markers
@@ -76,7 +78,13 @@ function showLocation(jsonObj, myMap) {
     google.maps.event.addListener(markers[i], 'click', function () {
 
       console.log("This is the marker I clicked on");
+      // Retrieve the station reference for the marker clicked on
       var stationReference = locations[this.index].stationref;
+
+      // Retreive and bind station name to the modal
+      // document.getElementById('placeSearched').innerHTML = address;
+      // stationName
+      
       var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
       console.log(stationReference);
       console.log(stationDetailsURL);
@@ -90,11 +98,16 @@ function showLocation(jsonObj, myMap) {
       requestThree.onload = function () {
         var myresults = requestThree.response;
         var allValues = myresults['myCollection'].items;
-        console.log(allValues);
-        // getMqttValues(myresults, map);
+
+        for(var g = 0; g < allValues.length; g++) {
+          graphArrayValues[g] = allValues[g].value;
+          graphArrayTime[g] = allValues[g].dateTime;
+        }
+
+        // Call the Chart to set up the values
+        chartThing(graphArrayValues, graphArrayTime);
+        
       }
-
-
 
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
@@ -192,13 +205,16 @@ window.onload = function getDate() {
   document.getElementById('currentDate').innerHTML = d.toUTCString();
 };
 
-window.onload = function chartThing() {
+function chartThing(graphValues, graphTimes) {
+
+  console.log("The values I received are: ");
+  console.log(graphValues);
+  console.log(graphTimes);
 
   // Our labels along the x-axis
   var years = [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050];
   // For drawing the lines
-  var africa = [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478];
-  var asia = [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267];
+  var africa = graphArrayValues;
 
   var ctx = document.getElementById("myChart");
 
@@ -209,13 +225,7 @@ window.onload = function chartThing() {
       datasets: [
         {
           data: africa,
-          label: "Africa",
-          borderColor: "#3e95cd",
-          fill: false
-        },
-        {
-          data: asia,
-          label: "Asia",
+          label: "Water Levels",
           borderColor: "#3e95cd",
           fill: false
         }

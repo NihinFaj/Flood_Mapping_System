@@ -89,7 +89,7 @@ function showLocation(jsonObj, myMap) {
       console.log(stationReference);
       console.log(stationDetailsURL);
 
-      // Make call to the MQTT URL and return result
+      // Make call to the Station historical Data URL and return historical data result
       var requestThree = new XMLHttpRequest();
       requestThree.open('GET', stationDetailsURL);
       requestThree.responseType = 'json';
@@ -104,8 +104,8 @@ function showLocation(jsonObj, myMap) {
           graphArrayTime[g] = allValues[g].dateTime;
         }
 
-        // Call the Chart to set up the values
-        chartThing(graphArrayValues, graphArrayTime);
+        // Call the graph creation function to set up the graph when it is popped up
+        graphCreation(graphArrayValues, graphArrayTime);
         
       }
 
@@ -205,7 +205,7 @@ window.onload = function getDate() {
   document.getElementById('currentDate').innerHTML = d.toUTCString();
 };
 
-function chartThing(graphValues, graphTimes) {
+function graphCreation(graphValues, graphTimes) {
 
   console.log("The values I received are: ");
   console.log(graphValues);

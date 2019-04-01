@@ -57,11 +57,12 @@ function showLocation(jsonObj, myMap) {
   var locations = jsonObj['myCollection'];
   var markers = [];
 
-  for(var i = 0; i < locations.length; i++) {
+  for (var i = 0; i < locations.length; i++) {
     var latitude = locations[i].lat;
     var longitude = locations[i].long;
     var station = locations[i].label;
     var latLng = new google.maps.LatLng(latitude, longitude);
+    console.log(locations[i]);
 
     markers[i] = new google.maps.Marker({
       position: latLng,
@@ -71,36 +72,40 @@ function showLocation(jsonObj, myMap) {
 
     markers[i].index = i;
 
-    var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h1 id="firstHeading" class="firstHeading">Information</h1>'+
-            '<div id="bodyContent">'+
-            '<p><b>Info</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-            'sandstone rock formation in the southern part of the '+
-            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-            'south west of the nearest large town, Alice Springs; 450&#160;km '+
-            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-            'Aboriginal people of the area. It has many springs, waterholes, '+
-            'rock caves and ancient paintings. Uluru is listed as a World '+
-            'Heritage Site.</p>'+
-            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-            '(last visited June 22, 2009).</p>'+
-            '</div>'+
-            '</div>';
-
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString
-    });
-
     google.maps.event.addListener(markers[i], 'click', function () {
-      map.setZoom(10);
-      map.setCenter(markers[this.index].getPosition());
 
-      infowindow.open(map, markers[this.index]);
+      var modal = document.getElementById('myModal');
+      var span = document.getElementsByClassName("close")[0];
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+      modal.style.display = "block";
+
+      console.log("I am have clicked on a Marker oo");
+
+      // var contentString = '<div id="content">' +
+      //   '<canvas id="myChart" width="450%" height="280%"></canvas>' +
+      //   '</div>';
+
+      // var infowindow = new google.maps.InfoWindow({
+      //   content: contentString
+      // });
+
+      map.setZoom(10);
+      // map.setCenter(markers[this.index].getPosition());
+      // infowindow.open(map, markers[this.index]);
+
+      // chartThing();
     });
   }
 }
@@ -113,22 +118,21 @@ function showLocation(jsonObj, myMap) {
 function getMqttValues(jsonObj) {
   var mqttValues = jsonObj['myCollection'];
   console.log(mqttValues);
-  for(var i = 0; i < mqttValues.length; i++) {
+  for (var i = 0; i < mqttValues.length; i++) {
 
     var distanceSensorFromRiverBed = mqttValues[i].distance_flood_plain_from_river_bed;
     var distanceFloodPlainFromRiverBed = mqttValues[i].distance_flood_plain_from_river_bed;
 
     var base64Payload = mqttValues[i].payload_raw;
-    var hexadecimalValue =  base64toHEX(base64Payload);
+    var hexadecimalValue = base64toHEX(base64Payload);
     var reportedDistanceValue = parseInt(hexadecimalValue, 16);
 
     var depthValueOfRiver = distanceSensorFromRiverBed - reportedDistanceValue;
     var distanceFromFlooding = distanceFloodPlainFromRiverBed - depthValueOfRiver;
 
-    if(distanceFromFlooding <= 0 || reportedDistanceValue <= (distanceSensorFromRiverBed - distanceFloodPlainFromRiverBed)) {
+    if (distanceFromFlooding <= 0 || reportedDistanceValue <= (distanceSensorFromRiverBed - distanceFloodPlainFromRiverBed)) {
       console.log("Flood has happened!!");
     }
-
   }
 }
 
@@ -139,9 +143,9 @@ function getMqttValues(jsonObj) {
 function base64toHEX(base64) {
   var raw = atob(base64);
   var HEX = '';
-  for ( i = 0; i < raw.length; i++ ) {
+  for (i = 0; i < raw.length; i++) {
     var _hex = raw.charCodeAt(i).toString(16)
-    HEX += (_hex.length==2?_hex:'0'+_hex);
+    HEX += (_hex.length == 2 ? _hex : '0' + _hex);
   }
   return HEX.toUpperCase();
 }
@@ -178,39 +182,55 @@ window.onload = function getDate() {
   document.getElementById('currentDate').innerHTML = d.toUTCString();
 };
 
-function chartThing() {
-  // Get the context of the canvas element we want to select
-var ctx = document.getElementById("myChart").getContext("2d");
+window.onload = function chartThing() {
 
-// Instantiate a new chart using 'data' (defined below)
-var myChart = new Chart(ctx).Line(data);
+  // Our labels along the x-axis
+  var years = [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050];
+  // For drawing the lines
+  var africa = [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478];
+  var asia = [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267];
+  var europe = [168, 170, 178, 190, 203, 276, 408, 547, 675, 734];
+  var latinAmerica = [40, 20, 10, 16, 24, 38, 74, 167, 508, 784];
+  var northAmerica = [6, 3, 2, 2, 7, 26, 82, 172, 312, 433];
 
-var data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "My First dataset",
-      fillColor: "rgba(220,220,220,0.2)",
-      strokeColor: "rgba(220,220,220,1)",
-      pointColor: "rgba(220,220,220,1)",
-      pointStrokeColor: "#fff",
-      pointHighlightFill: "#fff",
-      pointHighlightStroke: "rgba(220,220,220,1)",
-      data: [65, 59, 80, 81, 56, 55, 40]
-    },
-    {
-      label: "My Second dataset",
-      fillColor: "rgba(151,187,205,0.2)",
-      strokeColor: "rgba(151,187,205,1)",
-      pointColor: "rgba(151,187,205,1)",
-      pointStrokeColor: "#fff",
-      pointHighlightFill: "#fff",
-      pointHighlightStroke: "rgba(151,187,205,1)",
-      data: [28, 48, 40, 19, 86, 27, 90]
+  var ctx = document.getElementById("myChart");
+
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [
+        {
+          data: africa,
+          label: "Africa",
+          borderColor: "#3e95cd",
+          fill: false
+        },
+        {
+          data: asia,
+          label: "Asia",
+          borderColor: "#3e95cd",
+          fill: false
+        },
+        {
+          data: europe,
+          label: "Europe",
+          borderColor: "#3e95cd",
+          fill: false
+        },
+        {
+          data: latinAmerica,
+          label: "Latin America",
+          borderColor: "#3e95cd",
+          fill: false
+        },
+        {
+          data: northAmerica,
+          label: "North America",
+          borderColor: "#3e95cd",
+          fill: false
+        }
+      ]
     }
-  ]
-};
-
+  });
 }
-
-// chartThing();

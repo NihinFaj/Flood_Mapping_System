@@ -78,6 +78,7 @@ function showLocation(jsonObj, myMap) {
       var span = document.getElementsByClassName("close")[0];
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
+    
 
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
@@ -106,6 +107,7 @@ function showLocation(jsonObj, myMap) {
       // infowindow.open(map, markers[this.index]);
 
       // chartThing();
+      document.getElementsByClassName("Location")[0].innerHTML = station;
     });
   }
 }

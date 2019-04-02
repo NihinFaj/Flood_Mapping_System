@@ -10,6 +10,49 @@ const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
 const demoTestURL = 'http://localhost:3001/api/test';
 
+var OneSignal = window.OneSignal || [];
+
+createNotifcation("Flood Warning", "There is a flood at..");
+
+function createNotifcation(title, message) {
+  OneSignal.push(function () {
+    OneSignal.init({
+      appId: "53071771-a32a-41c8-a198-06fbc871a952",
+      notifyButton: {
+        enable: true,
+      },
+      allowLocalhostAsSecureOrigin: true,
+    });
+    OneSignal.sendSelfNotification(
+      title,
+      message,
+      'https://example.com/?_osp=do_not_open',
+      'https://onesignal.com/images/notification_logo.png', {
+        notificationType: 'news-feature'
+      },
+      [{
+          /* Buttons */
+          /* Choose any unique identifier for your button. The ID of the clicked button is passed to you so you can identify which button is clicked */
+          id: 'like-button',
+          /* The text the button should display. Supports emojis. */
+          text: 'Like',
+          /* A valid publicly reachable URL to an icon. Keep this small because it's downloaded on each notification display. */
+          icon: 'http://i.imgur.com/N8SN8ZS.png',
+          /* The URL to open when this action button is clicked. See the sections below for special URLs that prevent opening any window. */
+          url: 'https://example.com/?_osp=do_not_open'
+        },
+        {
+          id: 'read-more-button',
+          text: 'Read more',
+          icon: 'http://i.imgur.com/MIxJp1L.png',
+          url: 'https://example.com/?_osp=do_not_open'
+        }
+      ]
+    );
+  });
+}
+
+
 /**
  * Function that initialises the map and displays neccesary markers
  * on the map
@@ -17,13 +60,17 @@ const demoTestURL = 'http://localhost:3001/api/test';
 function initMap() {
 
   map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 51.297500, lng: 1.069722 },
+    center: {
+      lat: 51.297500,
+      lng: 1.069722
+    },
     zoom: 10
   });
 
   // Make call to the Station URL and return result
   var requestOne = new XMLHttpRequest();
   requestOne.open('GET', stationsURL);
+  // requestOne.setRequestHeader('Access-Control-Allow-Origin', 'http://localhost:3001/api/stations');
   requestOne.responseType = 'json';
   requestOne.send();
 
@@ -48,10 +95,10 @@ function initMap() {
     geocodeAddress(geocoder, map);
   });
 
-// Call the Flood demo simulaiton when the test demo button is clicked
-document.getElementById('demoTest').addEventListener('click', function () {
-  callDemoSimulatedFlood();
-});
+  // Call the Flood demo simulaiton when the test demo button is clicked
+  document.getElementById('demoTest').addEventListener('click', function () {
+    callDemoSimulatedFlood();
+  });
 }
 
 /**
@@ -78,7 +125,7 @@ function showLocation(jsonObj, myMap) {
 
     markers[i].index = i;
 
-    google.maps.event.addListener(markers[i], 'click', function() {
+    google.maps.event.addListener(markers[i], 'click', function () {
       console.log(locations[this.index]);
 
       // Retrieve the station reference for the marker clicked on
@@ -88,7 +135,7 @@ function showLocation(jsonObj, myMap) {
       // Retrieve Station Name and Bind to the Popup Modal
       var stationName = locations[this.index].name;
       document.getElementById("stationName").innerHTML = stationName;
-      
+
       // Initialize the two graph arrays  to empty so that new values can be set on clicking a new marker
       var graphArrayValues = [];
       var graphArrayTime = [];
@@ -108,12 +155,12 @@ function showLocation(jsonObj, myMap) {
         var myresults = requestThree.response;
         var allValues = myresults['myCollection'].items;
 
-        for(var g = 0; g < allValues.length; g++) {
+        for (var g = 0; g < allValues.length; g++) {
           graphArrayValues[g] = allValues[g].value;
 
           // console.log(Date.parse(allValues[g].dateTime));
-          console.log(new Date (allValues[g].dateTime).getDate());
-          graphArrayTime[g] = new Date (allValues[g].dateTime).toUTCString();
+          console.log(new Date(allValues[g].dateTime).getDate());
+          graphArrayTime[g] = new Date(allValues[g].dateTime).toUTCString();
         }
 
         // Call the graph creation function to set up the graph with values when it is popped up
@@ -124,7 +171,7 @@ function showLocation(jsonObj, myMap) {
       var span = document.getElementsByClassName("close")[0];
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
-      modal.style.display = "block";      
+      modal.style.display = "block";
 
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
@@ -173,19 +220,19 @@ function getMqttValues(jsonObj) {
  * Function that calls the flood simulation URL
  */
 function callDemoSimulatedFlood() {
-   // Make call to the MQTT URL and return result
-   var requestFour = new XMLHttpRequest();
-   requestFour.open('GET', demoTestURL);
-   requestFour.responseType = 'json';
-   requestFour.send();
- 
-   requestFour.onload = function () {
-     var myresults = requestFour.response;
+  // Make call to the MQTT URL and return result
+  var requestFour = new XMLHttpRequest();
+  requestFour.open('GET', demoTestURL);
+  requestFour.responseType = 'json';
+  requestFour.send();
 
-     var retrievedDemoData = myresults['myCollection'].items[0];
-     console.log(retrievedDemoData);
+  requestFour.onload = function () {
+    var myresults = requestFour.response;
 
-   }
+    var retrievedDemoData = myresults['myCollection'].items[0];
+    console.log(retrievedDemoData);
+
+  }
 }
 
 /**
@@ -209,7 +256,9 @@ function base64toHEX(base64) {
  */
 function geocodeAddress(geocoder, resultsMap) {
   var address = document.getElementById('address').value;
-  geocoder.geocode({ 'address': address }, function (results, status) {
+  geocoder.geocode({
+    'address': address
+  }, function (results, status) {
     if (status === 'OK') {
       resultsMap.setCenter(results[0].geometry.location);
       // Uncomment to allow marker be displayed on search location
@@ -249,7 +298,7 @@ function graphCreation(graphValues, graphTimes) {
 
   clickCounter++;
   console.log(clickCounter)
-  if(clickCounter > 1) {
+  if (clickCounter > 1) {
     myChart.destroy();
     console.log("Chart was destroyed first, before constructed again to prevent chart flickering.");
   }
@@ -270,14 +319,12 @@ function graphCreation(graphValues, graphTimes) {
     type: 'line',
     data: {
       labels: years,
-      datasets: [
-        {
-          data: values,
-          label: "Water Levels",
-          borderColor: "#3e95cd",
-          fill: false
-        }
-      ]
+      datasets: [{
+        data: values,
+        label: "Water Levels",
+        borderColor: "#3e95cd",
+        fill: false
+      }]
     }
   });
 }

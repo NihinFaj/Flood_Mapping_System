@@ -1,161 +1,184 @@
 <!DOCTYPE html>
 <html>
-<html lang="en">
+  <html lang="en">
+    <head>
+      <!-- Meta Data -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta charset="utf-8" />
 
-<head>
-  <!-- Meta Data -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="utf-8">
+      <!-- Title -->
+      <title>UK Flood Monitoring and Alert System</title>
 
-  <!-- Title -->
-  <title>UK Flood Monitoring and Alert System</title>
+      <link rel="manifest" href="/manifest.json" />
+      <script
+        src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
+        async=""
+      ></script>
+      <script>
+        var OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+          OneSignal.init({
+            appId: "53071771-a32a-41c8-a198-06fbc871a952",
+            notifyButton: {
+              enable: true
+            },
+            allowLocalhostAsSecureOrigin: true
+          });
+        });
+      </script>
 
-  <link rel="manifest" href="/manifest.json" />
-  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-  <script>
-    var OneSignal = window.OneSignal || [];
-    OneSignal.push(function () {
-      OneSignal.init({
-        appId: "53071771-a32a-41c8-a198-06fbc871a952",
-        notifyButton: {
-          enable: true,
-        },
-        allowLocalhostAsSecureOrigin:true,
-      });
-    });
-  </script>
+      <!-- Scripts -->
 
-  <!-- Scripts -->
+      <!-- Chart.js Script Start-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+      <!-- Chart.js Script End-->
 
-  <!-- Chart.js Script Start-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-  <!-- Chart.js Script End-->
+      <script
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"
+      ></script>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+      <!-- Custom Script Start -->
+      <script src="map.js"></script>
+      <!-- Custom Scripts End-->
 
-  <!-- Custom Script Start -->
-  <script src="map.js"></script>
-  <!-- Custom Scripts End-->
+      <!-- Google Map Script -->
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACxXYNZL4kLievZXYfvrMj68yXVKGXhfs&callback=initMap"
+        async
+        defer
+      ></script>
 
-  <!-- Google Map Script -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACxXYNZL4kLievZXYfvrMj68yXVKGXhfs&callback=initMap"
-    async defer></script>
+      <!-- Stylesheets -->
+      <!-- Load icon library -->
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <link href="map.css" rel="stylesheet" />
+      <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous"
+      />
+    </head>
 
-  <!-- Stylesheets -->
-  <!-- Load icon library -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="map.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-
-<body>
-  <!-- Header -->
-  <div class="header">
-    <h4><b>Flood Monitoring System </b></h4>
-  </div>
-  <!-- Header Ends-->
-
-  <!-- Content -->
-  <div class="container pad">
-    <!-- First Row Starts-->
-    <div class="row">
-      <div class="col-sm-1">
+    <body>
+      <!-- Header -->
+      <div class="header">
+        <h4><b>Flood Monitoring System </b></h4>
       </div>
-      <div class="col-sm-5">
-        <h2><b>
-            Flood Warnings for:
-          </b></h2>
-        <h1 id="placeSearched" class="bold">
-          Kent, England
-        </h1>
-        <p class="blue" id="currentDate">
-        </p>
-      </div>
-      <div class="col-sm-3">
-      </div>
-      <div class="col-sm-3">
-        <button id="demoTest" type="button">Test Demo<i class="fa fa-search"></i></button>
-      </div>
-    </div>
-    <!-- First Row Ends-->
+      <!-- Header Ends-->
 
-    <!-- Second Row Starts-->
-    <div class="row">
-      <div class="col-sm-1">
-      </div>
-      <div class="col-sm-4">
-        <div class="searchArea">
-          <h5><b>
-              Show warnings near a location
-            </b></h5>
-          <form class="example">
-            <input id="address" type="text" placeholder="Enter location..." name="search">
-            <button id="submit" type="button"><i class="fa fa-search"></i></button>
-          </form>
+      <!-- Content -->
+      <div class="container pad">
+        <!-- First Row Starts-->
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-5">
+            <h2>
+              <b>
+                Flood Warnings for:
+              </b>
+            </h2>
+            <h1 id="placeSearched" class="bold">
+              Kent, England
+            </h1>
+            <p class="blue" id="currentDate"></p>
+          </div>
+          <div class="col-sm-3"></div>
+          <div class="col-sm-3">
+            <button id="demoTest" type="button">
+              Test Demo<i class="fa fa-search"></i>
+            </button>
+          </div>
         </div>
+        <!-- First Row Ends-->
 
-        <div class="warnings">
-        </div>
-        <div class="warnings">
-          <p>
-            hh
-          </p>
-        </div>
-        <div class="warnings">
-          <p>
-            hh
-          </p>
-        </div>
-      </div>
-      <div class="col-sm-7">
-        <div id="map"></div>
-      </div>
-      <!-- <div class="col-sm-1">
-      </div> -->
-    </div>
-    <!-- Second Row Ends-->
-
-    <!-- Third Row Starts-->
-    <div class="row">
-      <div class="col-sm-12">
-
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
-          <!-- Modal content -->
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 id="stationName">
-                <!-- Station -->
-              </h3>
-              <span class="close">&times;</span>
-
+        <!-- Second Row Starts-->
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-4">
+            <div class="searchArea">
+              <h5>
+                <b>
+                  Show warnings near a location
+                </b>
+              </h5>
+              <form class="example">
+                <input
+                  id="address"
+                  type="text"
+                  placeholder="Enter location..."
+                  name="search"
+                />
+                <button id="submit" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </form>
             </div>
-            <div class="modal-body">
-              <canvas id="myChart" height="100%" ,width="100%"></canvas>
+
+            <div class="warnings"></div>
+            <div class="warnings">
+              <p>
+                hh
+              </p>
+            </div>
+            <div class="warnings">
+              <p>
+                hh
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <div id="map"></div>
+          </div>
+          <!-- <div class="col-sm-1">
+      </div> -->
+        </div>
+        <!-- Second Row Ends-->
+
+        <!-- Third Row Starts-->
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 id="stationName">
+                    <!-- Station -->
+                  </h3>
+                  <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                  <canvas id="myChart" height="100%" ,width="100%"></canvas>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <!-- Third Row Ends-->
       </div>
-    </div>
-    <!-- Third Row Ends-->
+      <!-- Content Ends -->
 
-  </div>
-  <!-- Content Ends -->
-
-  <!-- Footer -->
-  <footer>
-    Internet of Things Assessment 3 - Copyright 2018.
-  </footer>
-  <!-- Footer Ends-->
-</body>
-
+      <!-- Footer -->
+      <footer>
+        Internet of Things Assessment 3 - Copyright 2018.
+      </footer>
+      <!-- Footer Ends-->
+    </body>
+  </html>
 </html>

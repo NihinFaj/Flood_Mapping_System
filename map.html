@@ -20,7 +20,7 @@
         notifyButton: {
           enable: true,
         },
-        allowLocalhostAsSecureOrigin:true,
+        allowLocalhostAsSecureOrigin: true,
       });
     });
   </script>
@@ -83,7 +83,7 @@
       <div class="col-sm-3">
       </div>
       <div class="col-sm-3">
-        <button id="demoTest" type="button">Test Demo<i class="fa fa-search"></i></button>
+        <button id="demoTest" type="button">Test Demo</button>
       </div>
     </div>
     <!-- First Row Ends-->
@@ -104,8 +104,63 @@
         </div>
 
         <div class="warnings">
+          <!-- Low Warnings Tag -->
+          <div id="lowWarnings">
+            <span>
+              <img src="/images/flood-alerts-low.gif">
+            </span> 
+            <h4>
+              <b>
+                Severe Flood Warnings
+              </b>
+            </h4>
+            <h6>
+                Avoid flood areas. Only drive in emergencies. For more information check local media
+            </h6>
+          </div>
+
+          <!-- Medium Warnings Tag -->
+          <div id="mediumWarnigs">
+              <span>
+                <img src="/images/flood-alerts-medium.gif">
+              </span> 
+              <!-- <span>
+                <b>
+                    0
+                </b>
+              </span> -->
+              <h4>
+                <b>
+                  Severe Flood Warnings
+                </b>
+              </h4>
+              <h6>
+                  Avoid flood areas. Only drive in emergencies. For more information check local media
+              </h6>
+            </div>
+
+           <!-- High Warnings Tag -->
+           <div id="highWarnings">
+              <span>
+                <img src="/images/flood-alerts-high.gif">
+              </span> 
+              <!-- <span>
+                <b>
+                    0
+                </b>
+              </span> -->
+              <h4>
+                <b>
+                  Severe Flood Warnings
+                </b>
+              </h4>
+              <h6>
+                  Avoid flood areas. Only drive in emergencies. For more information check local media
+              </h6>
+            </div>  
+
         </div>
-        <div class="warnings">
+        <!-- <div class="warnings">
           <p>
             hh
           </p>
@@ -114,7 +169,7 @@
           <p>
             hh
           </p>
-        </div>
+        </div> -->
       </div>
       <div class="col-sm-7">
         <div id="map"></div>

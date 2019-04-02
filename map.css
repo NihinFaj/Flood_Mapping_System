@@ -41,18 +41,21 @@
         width: 60%
       }
       #submit {
-        width: 10%;
+        width: 20%;
         background-color: violet
       }
       #demoTest {
         /* margin-top: 20px; */
         width: 50%;
-        background-color: aqua;
+        background-color: cadetblue;
+        float: right;
+        margin-bottom: 10%;
       }
       .warnings {
         width: 100%;
-        height: 130px;
+        height: 200px;
         border-bottom: 1px solid #888888;
+        /* padding-bottom: 20%; */
       }
       .icon-flood-warning-low {
         width: 50px;
@@ -63,14 +66,13 @@
         background-size: 90%;
         margin-left: -2px;
     }
-    .icon-flood-warning-medium {
+    img {
       width: 50px;
       height: 50px;
-      margin-top: -26px !important;
-      background-image: url(/images/flood-alerts-medium.gif);
-      background-position: center center;
-      background-size: 90%;
-      margin-left: -2px;
+      margin-top: 5% !important;
+      /* background-position: center center; */
+      /* background-size: 90%; */
+      /* margin-left: -2px; */
   }
   .icon-flood-warning-high {
     width: 50px;

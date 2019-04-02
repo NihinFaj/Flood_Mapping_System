@@ -5,6 +5,9 @@
  */
 
 var map;
+var low;
+var medium;
+var high;
 const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
 const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
@@ -48,10 +51,19 @@ function initMap() {
     geocodeAddress(geocoder, map);
   });
 
-// Call the Flood demo simulaiton when the test demo button is clicked
-document.getElementById('demoTest').addEventListener('click', function () {
-  callDemoSimulatedFlood();
-});
+  // Call the Flood demo simulaiton when the test demo button is clicked
+  document.getElementById('demoTest').addEventListener('click', function () {
+    callDemoSimulatedFlood();
+  });
+
+  // Hide all the degress of flood warnings when the map is clicked
+  low = document.getElementById("lowWarnings");
+  medium = document.getElementById("mediumWarnigs");
+  high = document.getElementById("highWarnings");
+
+  low.style.display = "none";
+  medium.style.display = "none";
+  high.style.display = "none";
 }
 
 /**
@@ -78,25 +90,22 @@ function showLocation(jsonObj, myMap) {
 
     markers[i].index = i;
 
-    google.maps.event.addListener(markers[i], 'click', function() {
+    google.maps.event.addListener(markers[i], 'click', function () {
       console.log(locations[this.index]);
+
+      // Retrieve Station Name and Bind to the Popup Modal
+      var stationName = locations[this.index].name;
+      document.getElementById("stationName").innerHTML = stationName;
+
+      var parameterName = locations[this.index].qualifier;
 
       // Retrieve the station reference for the marker clicked on
       var stationReference = locations[this.index].stationref;
       var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
 
-      // Retrieve Station Name and Bind to the Popup Modal
-      var stationName = locations[this.index].name;
-      document.getElementById("stationName").innerHTML = stationName;
-      
       // Initialize the two graph arrays  to empty so that new values can be set on clicking a new marker
       var graphArrayValues = [];
       var graphArrayTime = [];
-
-      console.log("Graph array is set back to 0 here on click of new marker");
-      console.log(graphArrayValues);
-      console.log(graphArrayTime);
-
 
       // Make call to the Station historical Data URL and return historical data result
       var requestThree = new XMLHttpRequest();
@@ -108,23 +117,20 @@ function showLocation(jsonObj, myMap) {
         var myresults = requestThree.response;
         var allValues = myresults['myCollection'].items;
 
-        for(var g = 0; g < allValues.length; g++) {
+        for (var g = 0; g < allValues.length; g++) {
           graphArrayValues[g] = allValues[g].value;
-
-          // console.log(Date.parse(allValues[g].dateTime));
-          console.log(new Date (allValues[g].dateTime).getDate());
-          graphArrayTime[g] = new Date (allValues[g].dateTime).toUTCString();
+          graphArrayTime[g] = new Date(allValues[g].dateTime).toUTCString();
         }
 
         // Call the graph creation function to set up the graph with values when it is popped up
-        graphCreation(graphArrayValues, graphArrayTime);
+        graphCreation(graphArrayValues, graphArrayTime, parameterName);
       }
 
       var modal = document.getElementById('myModal');
       var span = document.getElementsByClassName("close")[0];
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
-      modal.style.display = "block";      
+      modal.style.display = "block";
 
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
@@ -150,7 +156,6 @@ function showLocation(jsonObj, myMap) {
  */
 function getMqttValues(jsonObj) {
   var mqttValues = jsonObj['myCollection'];
-  // console.log(mqttValues);
   for (var i = 0; i < mqttValues.length; i++) {
 
     var distanceSensorFromRiverBed = mqttValues[i].distance_flood_plain_from_river_bed;
@@ -173,19 +178,27 @@ function getMqttValues(jsonObj) {
  * Function that calls the flood simulation URL
  */
 function callDemoSimulatedFlood() {
-   // Make call to the MQTT URL and return result
-   var requestFour = new XMLHttpRequest();
-   requestFour.open('GET', demoTestURL);
-   requestFour.responseType = 'json';
-   requestFour.send();
- 
-   requestFour.onload = function () {
-     var myresults = requestFour.response;
+  // Make call to the MQTT URL and return result
+  var requestFour = new XMLHttpRequest();
+  requestFour.open('GET', demoTestURL);
+  requestFour.responseType = 'json';
+  requestFour.send();
 
-     var retrievedDemoData = myresults['myCollection'].items[0];
-     console.log(retrievedDemoData);
+  requestFour.onload = function () {
+    var myresults = requestFour.response;
+    var retrievedDemoData = myresults['myCollection'].items[0];
+    console.log(retrievedDemoData);
 
-   }
+    if(retrievedDemoData.severityLevel == 1) {
+      high.style.display = "block";
+    }
+    else if(retrievedDemoData.severityLevel == 2) {
+      medium.style.display = "block";
+    }
+    else if(retrievedDemoData.severityLevel == 3) {
+      low.style.display = "block";
+    }
+  }
 }
 
 /**
@@ -241,22 +254,14 @@ var myChart;
  * Function that creates the graph and binds the values to the graph
  * @param {*} graphValues The station flood values to be binded to the graph
  * @param {*} graphTimes The station historical flood times to be binded to the graph
+ * @param {*} parameterName The value of the flood level type
  */
-function graphCreation(graphValues, graphTimes) {
-
-  console.log("Value of chart is below");
-  console.log(myChart);
-
+function graphCreation(graphValues, graphTimes, parameterName) {
+  console.log(parameterName);
   clickCounter++;
-  console.log(clickCounter)
-  if(clickCounter > 1) {
+  if (clickCounter > 1) {
     myChart.destroy();
-    console.log("Chart was destroyed first, before constructed again to prevent chart flickering.");
   }
-
-  // console.log("The values I received are: ");
-  // console.log(graphValues);
-  // console.log(graphTimes);
 
   // Our labels along the x-axis
   // var years = [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050];
@@ -273,7 +278,7 @@ function graphCreation(graphValues, graphTimes) {
       datasets: [
         {
           data: values,
-          label: "Water Levels",
+          label: parameterName,
           borderColor: "#3e95cd",
           fill: false
         }

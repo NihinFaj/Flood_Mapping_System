@@ -8,6 +8,7 @@ var map;
 const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
 const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
+const demoTestURL = 'http://localhost:3001/api/test';
 
 /**
  * Function that initialises the map and displays neccesary markers
@@ -47,13 +48,10 @@ function initMap() {
     geocodeAddress(geocoder, map);
   });
 
-  // document.getElementById('address').addEventListener("keyup", function(event) {
-  //   if (event.keyCode === 13) {
-  //   //  event.preventDefault();
-  //   //  document.getElementById("myBtn").click();
-  //   geocodeAddress(geocoder, map);
-  //   }
-  // });
+// Call the Flood demo simulaiton when the test demo button is clicked
+document.getElementById('demoTest').addEventListener('click', function () {
+  callDemoSimulatedFlood();
+});
 }
 
 /**
@@ -81,16 +79,16 @@ function showLocation(jsonObj, myMap) {
     markers[i].index = i;
 
     google.maps.event.addListener(markers[i], 'click', function() {
+      console.log(locations[this.index]);
 
       // Retrieve the station reference for the marker clicked on
       var stationReference = locations[this.index].stationref;
-
-      // Retreive and bind station name to the modal
-      // document.getElementById('placeSearched').innerHTML = address;
-      // stationName
-      
       var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
 
+      // Retrieve Station Name and Bind to the Popup Modal
+      var stationName = locations[this.index].name;
+      document.getElementById("stationName").innerHTML = stationName;
+      
       // Initialize the two graph arrays  to empty so that new values can be set on clicking a new marker
       var graphArrayValues = [];
       var graphArrayTime = [];
@@ -112,7 +110,10 @@ function showLocation(jsonObj, myMap) {
 
         for(var g = 0; g < allValues.length; g++) {
           graphArrayValues[g] = allValues[g].value;
-          graphArrayTime[g] = allValues[g].dateTime;
+
+          // console.log(Date.parse(allValues[g].dateTime));
+          console.log(new Date (allValues[g].dateTime).getDate());
+          graphArrayTime[g] = new Date (allValues[g].dateTime).toUTCString();
         }
 
         // Call the graph creation function to set up the graph with values when it is popped up
@@ -138,7 +139,6 @@ function showLocation(jsonObj, myMap) {
 
       map.setZoom(10);
       map.setCenter(markers[this.index].getPosition());
-      // document.getElementsByClassName("Location")[0].innerHTML = station;
     });
   }
 }
@@ -167,6 +167,25 @@ function getMqttValues(jsonObj) {
       console.log("Flood has happened!!");
     }
   }
+}
+
+/**
+ * Function that calls the flood simulation URL
+ */
+function callDemoSimulatedFlood() {
+   // Make call to the MQTT URL and return result
+   var requestFour = new XMLHttpRequest();
+   requestFour.open('GET', demoTestURL);
+   requestFour.responseType = 'json';
+   requestFour.send();
+ 
+   requestFour.onload = function () {
+     var myresults = requestFour.response;
+
+     var retrievedDemoData = myresults['myCollection'].items[0];
+     console.log(retrievedDemoData);
+
+   }
 }
 
 /**

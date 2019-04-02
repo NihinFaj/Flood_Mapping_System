@@ -10,6 +10,21 @@
   <!-- Title -->
   <title>UK Flood Monitoring and Alert System</title>
 
+  <link rel="manifest" href="/manifest.json" />
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    var OneSignal = window.OneSignal || [];
+    OneSignal.push(function () {
+      OneSignal.init({
+        appId: "53071771-a32a-41c8-a198-06fbc871a952",
+        notifyButton: {
+          enable: true,
+        },
+        allowLocalhostAsSecureOrigin:true,
+      });
+    });
+  </script>
+
   <!-- Scripts -->
 
   <!-- Chart.js Script Start-->
@@ -65,7 +80,10 @@
         <p class="blue" id="currentDate">
         </p>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-3">
+      </div>
+      <div class="col-sm-3">
+        <button id="demoTest" type="button">Test Demo<i class="fa fa-search"></i></button>
       </div>
     </div>
     <!-- First Row Ends-->
@@ -106,29 +124,29 @@
     </div>
     <!-- Second Row Ends-->
 
-        <!-- Third Row Starts-->
-        <div class="row">
-            <div class="col-sm-12">
-            
-            <!-- The Modal -->
-            <div id="myModal" class="modal">
-              <!-- Modal content -->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h3 id="stationName">
-                    Station
-                  </h3>
-                  <span class="close">&times;</span>
-                
-              </div>
-              <div class="modal-body">
-                <canvas id="myChart"height="100%",width="100%"></canvas>
-              </div>
-              </div>
+    <!-- Third Row Starts-->
+    <div class="row">
+      <div class="col-sm-12">
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 id="stationName">
+                <!-- Station -->
+              </h3>
+              <span class="close">&times;</span>
+
+            </div>
+            <div class="modal-body">
+              <canvas id="myChart" height="100%" ,width="100%"></canvas>
             </div>
           </div>
-          </div>
-          <!-- Third Row Ends-->
+        </div>
+      </div>
+    </div>
+    <!-- Third Row Ends-->
 
   </div>
   <!-- Content Ends -->

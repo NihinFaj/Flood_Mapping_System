@@ -102,8 +102,6 @@ function initMap() {
   document.getElementById('demoTest').addEventListener('click', function () {
     callDemoSimulatedFlood();
   });
-<<<<<<< HEAD
-=======
 
   // Hide all the degress of flood warnings when the map is clicked
   low = document.getElementById("lowWarnings");
@@ -113,7 +111,6 @@ function initMap() {
   low.style.display = "none";
   medium.style.display = "none";
   high.style.display = "none";
->>>>>>> d461ed74b228ce5c709ca2ddfc26c5d3c7ea7a27
 }
 
 /**
@@ -153,13 +150,10 @@ function showLocation(jsonObj, myMap) {
       var stationReference = locations[this.index].stationref;
       var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
 
-<<<<<<< HEAD
       // Retrieve Station Name and Bind to the Popup Modal
       var stationName = locations[this.index].name;
       document.getElementById("stationName").innerHTML = stationName;
 
-=======
->>>>>>> d461ed74b228ce5c709ca2ddfc26c5d3c7ea7a27
       // Initialize the two graph arrays  to empty so that new values can be set on clicking a new marker
       var graphArrayValues = [];
       var graphArrayTime = [];
@@ -176,12 +170,9 @@ function showLocation(jsonObj, myMap) {
 
         for (var g = 0; g < allValues.length; g++) {
           graphArrayValues[g] = allValues[g].value;
-<<<<<<< HEAD
 
           // console.log(Date.parse(allValues[g].dateTime));
           console.log(new Date(allValues[g].dateTime).getDate());
-=======
->>>>>>> d461ed74b228ce5c709ca2ddfc26c5d3c7ea7a27
           graphArrayTime[g] = new Date(allValues[g].dateTime).toUTCString();
         }
 
@@ -249,12 +240,7 @@ function callDemoSimulatedFlood() {
 
   requestFour.onload = function () {
     var myresults = requestFour.response;
-<<<<<<< HEAD
 
-    var retrievedDemoData = myresults['myCollection'].items[0];
-    console.log(retrievedDemoData);
-
-=======
     var retrievedDemoData = myresults['myCollection'].items[0];
     console.log(retrievedDemoData);
 
@@ -267,7 +253,6 @@ function callDemoSimulatedFlood() {
     else if(retrievedDemoData.severityLevel == 3) {
       low.style.display = "block";
     }
->>>>>>> d461ed74b228ce5c709ca2ddfc26c5d3c7ea7a27
   }
 }
 
@@ -331,10 +316,6 @@ var myChart;
 function graphCreation(graphValues, graphTimes, parameterName) {
   console.log(parameterName);
   clickCounter++;
-<<<<<<< HEAD
-  console.log(clickCounter)
-=======
->>>>>>> d461ed74b228ce5c709ca2ddfc26c5d3c7ea7a27
   if (clickCounter > 1) {
     myChart.destroy();
   }
@@ -351,14 +332,6 @@ function graphCreation(graphValues, graphTimes, parameterName) {
     type: 'line',
     data: {
       labels: years,
-<<<<<<< HEAD
-      datasets: [{
-        data: values,
-        label: "Water Levels",
-        borderColor: "#3e95cd",
-        fill: false
-      }]
-=======
       datasets: [
         {
           data: values,
@@ -367,7 +340,6 @@ function graphCreation(graphValues, graphTimes, parameterName) {
           fill: false
         }
       ]
->>>>>>> d461ed74b228ce5c709ca2ddfc26c5d3c7ea7a27
     }
   });
 }

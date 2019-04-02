@@ -14,8 +14,6 @@ const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
 const demoTestURL = 'http://localhost:3001/api/test';
 
-createNotifcation("Flood Warning", "There is a flood at..");
-
 /**
  * Function that allows push noification to be sent to the web application
  * @param {*} title The title of the push notification
@@ -248,6 +246,9 @@ function callDemoSimulatedFlood() {
     var latLng = new google.maps.LatLng(floodLatitude, floodLongitude);
     console.log(retrievedDemoData);
 
+    // Send a push notification about a flood warning
+    createNotifcation("Flood Warning", "There is a flood at..");
+
     if(retrievedDemoData.severityLevel == 1) {
       high.style.display = "block";
       document.getElementById('demoMessageHigh').innerHTML = retrievedDemoData.message;
@@ -277,8 +278,7 @@ function callDemoSimulatedFlood() {
     map.setCenter(marker.getPosition());
 
     google.maps.event.addListener(marker, 'click', function () {
-      console.log("I have been clicked");
-
+      
       // Retrieve Station Name and Bind to the Popup Modal
       var stationName = retrievedDemoData.description;
       document.getElementById("stationName").innerHTML = stationName;

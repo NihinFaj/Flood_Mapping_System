@@ -246,12 +246,19 @@ function callDemoSimulatedFlood() {
 
     if(retrievedDemoData.severityLevel == 1) {
       high.style.display = "block";
+      document.getElementById('demoMessageHigh').innerHTML = retrievedDemoData.message;
+      document.getElementById('riverNameHigh').innerHTML = retrievedDemoData.river;
+
     }
     else if(retrievedDemoData.severityLevel == 2) {
       medium.style.display = "block";
+      document.getElementById('demoMessageMedium').innerHTML = retrievedDemoData.message;
+      document.getElementById('riverNameMedium').innerHTML = retrievedDemoData.river;
     }
     else if(retrievedDemoData.severityLevel == 3) {
       low.style.display = "block";
+      document.getElementById('demoMessageLow').innerHTML = retrievedDemoData.message;
+      document.getElementById('riverNameLow').innerHTML = retrievedDemoData.river;
     }
   }
 }

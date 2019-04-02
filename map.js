@@ -1,6 +1,6 @@
 /**
  * @description The Javascript that controls the functionality of the Map
- * @author Nihinlolamiwa Fajemilehin, Timothy Shirgba
+ * @author Nihinlolamiwa Fajemilehin, Timothy Shirgba, Ben Shambrook, Guillaume Demay
  * @version 1.0
  */
 
@@ -8,15 +8,19 @@ var map;
 var low;
 var medium;
 var high;
+var OneSignal = window.OneSignal || [];
 const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
 const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
 const demoTestURL = 'http://localhost:3001/api/test';
 
-var OneSignal = window.OneSignal || [];
-
 createNotifcation("Flood Warning", "There is a flood at..");
 
+/**
+ * Function that allows push noification to be sent to the web application
+ * @param {*} title The title of the push notification
+ * @param {*} message The message of the push notificaiton
+ */
 function createNotifcation(title, message) {
   OneSignal.push(function () {
     OneSignal.init({
@@ -54,7 +58,6 @@ function createNotifcation(title, message) {
     );
   });
 }
-
 
 /**
  * Function that initialises the map and displays neccesary markers
@@ -98,12 +101,12 @@ function initMap() {
     geocodeAddress(geocoder, map);
   });
 
-  // Call the Flood demo simulaiton when the test demo button is clicked
+  // Call the Flood demo simulation when the test demo button is clicked
   document.getElementById('demoTest').addEventListener('click', function () {
     callDemoSimulatedFlood();
   });
 
-  // Hide all the degress of flood warnings when the map is clicked
+  // Hide all the degrees of flood warnings when the map is clicked
   low = document.getElementById("lowWarnings");
   medium = document.getElementById("mediumWarnigs");
   high = document.getElementById("highWarnings");
@@ -150,10 +153,6 @@ function showLocation(jsonObj, myMap) {
       var stationReference = locations[this.index].stationref;
       var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
 
-      // Retrieve Station Name and Bind to the Popup Modal
-      var stationName = locations[this.index].name;
-      document.getElementById("stationName").innerHTML = stationName;
-
       // Initialize the two graph arrays  to empty so that new values can be set on clicking a new marker
       var graphArrayValues = [];
       var graphArrayTime = [];
@@ -172,7 +171,6 @@ function showLocation(jsonObj, myMap) {
           graphArrayValues[g] = allValues[g].value;
 
           // console.log(Date.parse(allValues[g].dateTime));
-          console.log(new Date(allValues[g].dateTime).getDate());
           graphArrayTime[g] = new Date(allValues[g].dateTime).toUTCString();
         }
 
@@ -229,10 +227,12 @@ function getMqttValues(jsonObj) {
 }
 
 /**
- * Function that calls the flood simulation URL
+ * Function that calls the flood simulation URL, displays the flood alert and warning for the 
+ * flood and also drops a marker on the graph that can be clicked on to display the current 
+ * and hsitorical water levels
  */
 function callDemoSimulatedFlood() {
-  // Make call to the MQTT URL and return result
+  // Make call to the Flood Demo URL and return data
   var requestFour = new XMLHttpRequest();
   requestFour.open('GET', demoTestURL);
   requestFour.responseType = 'json';
@@ -242,6 +242,10 @@ function callDemoSimulatedFlood() {
     var myresults = requestFour.response;
 
     var retrievedDemoData = myresults['myCollection'].items[0];
+    var floodLatitude = retrievedDemoData.lat;
+    var floodLongitude = retrievedDemoData.long;
+    var floodAreaTitle = retrievedDemoData.label;
+    var latLng = new google.maps.LatLng(floodLatitude, floodLongitude);
     console.log(retrievedDemoData);
 
     if(retrievedDemoData.severityLevel == 1) {
@@ -260,6 +264,73 @@ function callDemoSimulatedFlood() {
       document.getElementById('demoMessageLow').innerHTML = retrievedDemoData.message;
       document.getElementById('riverNameLow').innerHTML = retrievedDemoData.river;
     }
+
+    var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'; 
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map,
+      title: floodAreaTitle,
+      icon: image,
+      animation: google.maps.Animation.DROP,
+    });
+    map.setZoom(10);
+    map.setCenter(marker.getPosition());
+
+    google.maps.event.addListener(marker, 'click', function () {
+      console.log("I have been clicked");
+
+      // Retrieve Station Name and Bind to the Popup Modal
+      var stationName = retrievedDemoData.description;
+      document.getElementById("stationName").innerHTML = stationName;
+
+      var parameterName = "Stage";
+
+      // Retrieve the station reference for the marker clicked on
+      var stationReference = retrievedDemoData.stationref;
+      var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
+
+      // Initialize the two graph arrays  to empty so that new values can be set on clicking a new marker
+      var graphArrayValues = [];
+      var graphArrayTime = [];
+
+      // Make call to the Station historical Data URL and return historical data result
+      var requestThree = new XMLHttpRequest();
+      requestThree.open('GET', stationDetailsURL);
+      requestThree.responseType = 'json';
+      requestThree.send();
+
+      requestThree.onload = function () {
+        var myresults = requestThree.response;
+        var allValues = myresults['myCollection'].items;
+
+        for (var g = 0; g < allValues.length; g++) {
+          graphArrayValues[g] = allValues[g].value;
+
+          // console.log(Date.parse(allValues[g].dateTime));
+          graphArrayTime[g] = new Date(allValues[g].dateTime).toUTCString();
+        }
+
+        // Call the graph creation function to set up the graph with values when it is popped up
+        graphCreation(graphArrayValues, graphArrayTime, parameterName);
+      }
+
+      var modal = document.getElementById('myModal');
+      var span = document.getElementsByClassName("close")[0];
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+      modal.style.display = "block";
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    });
   }
 }
 
@@ -321,14 +392,12 @@ var myChart;
  * @param {*} parameterName The value of the flood level type
  */
 function graphCreation(graphValues, graphTimes, parameterName) {
-  console.log(parameterName);
   clickCounter++;
   if (clickCounter > 1) {
     myChart.destroy();
   }
 
   // Our labels along the x-axis
-  // var years = [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050];
   var years = graphTimes;
   // For drawing the lines
   var values = graphValues;

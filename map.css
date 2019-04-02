@@ -57,15 +57,6 @@
         border-bottom: 1px solid #888888;
         /* padding-bottom: 20%; */
       }
-      .icon-flood-warning-low {
-        width: 50px;
-        height: 50px;
-        margin-top: -26px !important;
-        background-image: url(/images/flood-alerts-low.gif);
-        background-position: center center;
-        background-size: 90%;
-        margin-left: -2px;
-    }
     img {
       width: 50px;
       height: 50px;
@@ -74,15 +65,6 @@
       /* background-size: 90%; */
       /* margin-left: -2px; */
   }
-  .icon-flood-warning-high {
-    width: 50px;
-    height: 50px;
-    margin-top: -26px !important;
-    background-image: url(/images/flood-alerts-high.gif);
-    background-position: center center;
-    background-size: 90%;
-    margin-left: -2px;
-}
 .footer {
     margin-top: 50px;
     height: 0%;
@@ -119,7 +101,7 @@
   display: none; 
   position: fixed; 
   z-index: 1; 
-  padding-top: 200px; 
+  padding-top: 150px; 
   left: 0;
   top: 0;
   width: 100%; 
@@ -139,7 +121,7 @@
 
 }
 .modal-content {
-  position: relative;
+  position: fixed;
   max-width: 900px;
   background-color: #ffffff;
   margin: auto;
@@ -148,6 +130,7 @@
   width: 100%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
   border-radius: 3px;
+  /* margin-bottom: 50%; */
 
 }
 /* The Close Button */

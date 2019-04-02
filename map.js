@@ -8,8 +8,6 @@ var map;
 const requestURL = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
 const stationsURL = 'http://localhost:3001/api/stations';
 const mqttURL = 'http://localhost:3001/api/mqtt';
-// var graphArrayValues = [];
-// var graphArrayTime = [];
 
 /**
  * Function that initialises the map and displays neccesary markers
@@ -93,7 +91,7 @@ function showLocation(jsonObj, myMap) {
       
       var stationDetailsURL = "http://localhost:3001/api/historic?station=" + stationReference + "&number=100";
 
-      // Set the two graph arrays back to zero so that new values can be set on clicking a new marker
+      // Initialize the two graph arrays  to empty so that new values can be set on clicking a new marker
       var graphArrayValues = [];
       var graphArrayTime = [];
 

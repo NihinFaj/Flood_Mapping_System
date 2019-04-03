@@ -16,8 +16,8 @@ const demoTestURL = 'http://localhost:3001/api/test';
 
 /**
  * Function that allows push noification to be sent to the web application
- * @param {*} title The title of the push notification
- * @param {*} message The message of the push notificaiton
+ * @param {string} title The title of the push notification
+ * @param {string} message The message of the push notificaiton
  */
 function createNotifcation(title, message) {
   OneSignal.push(function () {
@@ -117,7 +117,7 @@ function initMap() {
 /**
  * Function that takes in a the JSON object of all locations retrieved and displays the locations
  * as markers on the Map  
- * @param {*} jsonObj The JSON object that contains all the locations retrieved
+ * @param {object} jsonObj The JSON object that contains all the locations retrieved
  */
 function showLocation(jsonObj, myMap) {
   var locations = jsonObj['myCollection'];
@@ -202,7 +202,7 @@ function showLocation(jsonObj, myMap) {
 /**
  * Function that takes in an Mqtt JSON Object, breaks it down into an Array and determines if flood is happening 
  * in the areas, based on calculations
- * @param {*} jsonObj The object retreivd from the Mqtt Server
+ * @param {object} jsonObj The object retreievd from the Mqtt Server
  */
 function getMqttValues(jsonObj) {
   var mqttValues = jsonObj['myCollection'];
@@ -336,7 +336,7 @@ function callDemoSimulatedFlood() {
 
 /**
  * Function that converts a Base64 value to Hexadecimal
- * @param {*} base64 The Base64 value to be converted to Hexadecimal
+ * @param {string} base64 The Base64 value to be converted to Hexadecimal
  */
 function base64toHEX(base64) {
   var raw = atob(base64);
@@ -350,8 +350,8 @@ function base64toHEX(base64) {
 
 /**
  *  Function that displays the location entered in the search box on the Map
- * @param {*} geocoder The geocoder object
- * @param {*} resultsMap The map object
+ * @param {object} geocoder The geocoder object
+ * @param {object} resultsMap The map object
  */
 function geocodeAddress(geocoder, resultsMap) {
   var address = document.getElementById('address').value;
@@ -387,9 +387,9 @@ var myChart;
 
 /**
  * Function that creates the graph and binds the values to the graph
- * @param {*} graphValues The station flood values to be binded to the graph
- * @param {*} graphTimes The station historical flood times to be binded to the graph
- * @param {*} parameterName The value of the flood level type
+ * @param {object} graphValues The station flood values to be binded to the graph
+ * @param {object} graphTimes The station historical flood times to be binded to the graph
+ * @param {string} parameterName The value of the flood level type
  */
 function graphCreation(graphValues, graphTimes, parameterName) {
   clickCounter++;

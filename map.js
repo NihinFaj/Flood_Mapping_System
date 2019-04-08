@@ -1,6 +1,6 @@
 /**
  * @description The Javascript that controls the functionality of the Map
- * @author Nihinlolamiwa Fajemilehin, Timothy Shirgba, Ben Shambrook, Guillaume Demay
+ * @author Nihinlolamiwa Fajemilehin, Timothy Shirgba
  * @version 1.0
  */
 

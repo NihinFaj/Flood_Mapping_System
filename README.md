@@ -2,7 +2,7 @@
 A flood monitoring and alert system, that displays present and historical water levels graphically across the UK and also gives flood alerts and warnings.
 
 # Getting Started
-Clone the project with the command **git clone https://github.com/NihinlolaFaj/Flood_Mapping_System**
+Clone the project with the command **git clone https://github.com/NihinFaj/Flood_Mapping_System**
 
 # Prerequisites
 A web browser (E.g Google Chrome)
